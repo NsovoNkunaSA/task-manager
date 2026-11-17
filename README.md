@@ -1,46 +1,75 @@
-# Getting Started with Create React App
+# Daymark Task Manager
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Daymark is a React and TypeScript task-list application. You can add tasks with a priority and due date, search and filter the list, mark tasks complete, and delete them. Tasks are saved in the browser's local storage.
 
-## Available Scripts
+## Project structure
 
-In the project directory, you can run:
+```text
+task-manager/
+├── public/
+│   ├── index.html           # HTML shell; React mounts into the #root element
+│   ├── favicon.ico          # Browser tab icon
+│   ├── logo*.png            # App icons
+│   ├── manifest.json        # Progressive Web App metadata
+│   └── robots.txt           # Search crawler instructions
+├── src/
+│   ├── App.tsx              # Main task app, state, task logic, and UI
+│   ├── App.css              # App layout and component styles
+│   ├── index.tsx            # React entry point; renders <App />
+│   ├── index.css            # Global styles
+│   ├── App.test.tsx         # App tests
+│   ├── setupTests.ts        # Test environment setup
+│   ├── reportWebVitals.ts   # Web Vitals reporting helper
+│   └── react-app-env.d.ts   # Create React App TypeScript declarations
+├── package.json             # Dependencies and npm scripts
+├── package-lock.json        # Exact dependency versions
+├── tsconfig.json            # TypeScript compiler settings
+├── .gitignore               # Files Git should ignore
+└── README.old.md            # Previous project documentation
+```
 
-### `npm start`
+## How the app works
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The app's main implementation is in `src/App.tsx`:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- `App` owns the task list and UI state (current filter, search text, and new-task form values).
+- `starterTasks` supplies example tasks when no saved task list exists.
+- `today` returns today's date in `YYYY-MM-DD` form for due-date comparisons.
+- `Icon` renders the small SVG icons used throughout the interface.
+- `addTask` validates the entered title and adds a task with its selected priority and due date.
+- `toggleTask` switches a task between complete and incomplete.
+- `deleteTask` removes a task from the list.
+- `counts` and `visibleTasks` are memoized values used to show filter counts and the filtered, searched list.
+- A `useEffect` saves task changes to `window.localStorage`. This is browser-local storage; it does not sync tasks between users or devices.
 
-### `npm test`
+`src/index.tsx` is the frontend entry point. It creates a React root in the `#root` element from `public/index.html`, then renders `App`.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Development
 
-### `npm run build`
+Install dependencies and start the Create React App development server:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```sh
+npm install
+npm start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Open [http://localhost:3000](http://localhost:3000). The development server serves the app and refreshes the page when source files change. `npm run dev` starts the same development server.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Other useful commands:
 
-### `npm run eject`
+```sh
+npm test       # Run the test runner
+npm run build  # Create an optimized production build in build/
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Server and production deployment
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+This repository currently contains a **frontend only**. It does not include a custom Node.js/Express server, backend API, or database. `npm start` runs the Create React App development server; it is not the production server. The task data is stored in each browser's local storage.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+For production, build the app and deploy the contents of the generated `build/` directory to a static web host:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```sh
+npm run build
+```
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+A Node.js host can also serve those static build files, but a production Node server is not included here. If you add one, configure it to serve files from `build/` and return `build/index.html` for app routes that do not match a static file. There are currently no API routes for tasks.
