@@ -14,12 +14,7 @@ type Task = {
 
 type Filter = 'all' | 'today' | 'upcoming' | 'completed';
 
-const starterTasks: Task[] = [
-  { id: 1, title: 'Review Q4 product roadmap', description: 'Add notes before the planning sync', completed: false, priority: 'high', dueDate: '2026-11-17', createdAt: '2026-11-16T09:00:00.000Z' },
-  { id: 2, title: 'Send the design handoff', description: 'Include updated mobile screens', completed: false, priority: 'medium', dueDate: '2026-11-17', createdAt: '2026-11-16T10:00:00.000Z' },
-  { id: 3, title: 'Book a room for the team retro', description: '', completed: false, priority: 'low', dueDate: '2026-11-19', createdAt: '2026-11-16T11:00:00.000Z' },
-  { id: 4, title: 'Tidy up research findings', description: 'Pull the key quotes into one doc', completed: true, priority: 'medium', dueDate: null, createdAt: '2026-11-15T12:00:00.000Z' },
-];
+const starterTasks: Task[] = [];
 
 const today = () => new Date().toISOString().slice(0, 10);
 
